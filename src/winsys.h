@@ -9,6 +9,9 @@
 //#include <stdarg.h>
 using namespace std;
 
+//this class is basically an interface
+//all the necessary functions are defined by other classes
+//except for the CRect constructor which stores the geometry of the windows
 class CView {
 protected:
     CRect geom;
@@ -25,14 +28,17 @@ public:
     virtual void move(const CPoint &delta);
 };
 
+//CWindow defines some of the
 class CWindow : public CView {
 protected:
+    //the "filling" mostly used by paint
     char c;
 public:
+    //default constructor
     CWindow(CRect r , char _c = '*') : CView(r) , c(_c) {}
-
+    //painting each and every row and column of the window with the c character
     void paint();
-
+    //moving the window
     bool handleEvent(int key);
 };
 

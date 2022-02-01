@@ -9,10 +9,14 @@
 
 using namespace std;
 
+//moving a window
+//the functionality of moving a window stays the same no matter which class is used
+//so no function overloads this
 void CView::move(const CPoint &delta) {
     geom.topleft += delta;
 }
 
+//painting each and every row and column of the window with the c character
 void CWindow::paint() {
     for (int y = geom.topleft.y; y < geom.topleft.y + geom.size.y; y++)
         for (int x = geom.topleft.x; x < geom.topleft.x + geom.size.x; x++) {
@@ -21,6 +25,7 @@ void CWindow::paint() {
         }
 }
 
+//calling the move function depending on which key was pressed
 bool CWindow::handleEvent(int key) {
     switch (key) {
         case KEY_UP:
@@ -39,9 +44,11 @@ bool CWindow::handleEvent(int key) {
     return false;
 }
 
+//painting a frame
 void CFramedWindow::paint() {
     for (int y = geom.topleft.y; y < geom.topleft.y + geom.size.y; y++) {
         if((y == geom.topleft.y) || (y == geom.topleft.y + geom.size.y - 1)) {
+            //painting the horizontal paths or the corners
             for (int x = geom.topleft.x; x < geom.topleft.x + geom.size.x; x++) {
                 gotoyx(y, x);
                 if((x == geom.topleft.x) || (x == geom.topleft.x + geom.size.x - 1))
@@ -50,6 +57,7 @@ void CFramedWindow::paint() {
                     printl("-");
             }
         } else {
+            //painting the vertical parts
             for (int x = geom.topleft.x; x < geom.topleft.x + geom.size.x; x++) {
                 gotoyx(y, x);
                 if((x == geom.topleft.x) || (x == geom.topleft.x + geom.size.x - 1))
@@ -90,6 +98,7 @@ bool CInputLine::handleEvent(int c) {
     text.push_back(c);
     return true;
 }
+
 
 void CGroup::paint() {
     for (int y = geom.topleft.y; y < geom.topleft.y + geom.size.y; y++) {
@@ -150,6 +159,9 @@ int CDesktop::getEvent() {
     return ngetch();
 }
 
+
+//main game loop
+//updates screen,
 void CDesktop::run() {
     update_screen();
     paint();

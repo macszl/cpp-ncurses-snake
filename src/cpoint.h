@@ -7,13 +7,13 @@ using namespace std;
 
 struct CPoint
 {
-
+    //values informing which column and which row is this point in
     int x;
     int y;
-
+    //constructor that has default values of 0 for x and y
     CPoint(int _x = 0, int _y = 0) : x(_x), y(_y) {};
 
-    //over
+
     CPoint &operator+=(const CPoint &delta) {
         x += delta.x;
         y += delta.y;

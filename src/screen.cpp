@@ -40,12 +40,17 @@ void done_screen() {
 }
 
 void update_screen() {
+    //function used to check whether the window has been resized in any way
+
+    //gets the origin cursor
     getscreenanchor(TopLeft.y, TopLeft.x);
+    //gets the current possible screen size
     getscreensize(BottomRight.y, BottomRight.x);
     BottomRight += TopLeft;
 }
 
 int ngetch() {
+    //wrapper for the ncurses based function getch
     return wgetch(stdscr);
 }
 
@@ -61,36 +66,49 @@ void getscreensize(int &y, int &x) {
 }
 
 int gotoyx(int y, int x) {
+    //changes the cursor positions
     cury = y;
     curx = x;
+
+    //???
     return (cury >= TopLeft.y && cury < BottomRight.y && curx >= TopLeft.x && curx < BottomRight.x);
 }
-
+//self explanatory
 void getcursor(int &y, int &x) {
     y = cury;
     x = curx;
 }
 
 void printc(char c) {
+    //prints out a char if the current y and x allows it
     if (c != '\n' && c != '\r')
     {
         if (cury >= TopLeft.y && cury < BottomRight.y && curx >= TopLeft.x && curx < BottomRight.x)
         {
+            //moves cursor
             wmove(stdscr, cury, curx);
+            //adds char
             addch(c);
         }
+        //increments the x variable of the cursor
         curx++;
     }
 }
 
 int printl(const char *fmt, ...) {
+    //wrapper for the ncurses based printline function
+
+    //starting up the variable argument list
     va_list ap;
     va_start(ap, fmt);
 
+
     char dest[LINE_MAX];
+    //Write formatted data from variable argument list to sized buffer
     vsnprintf(dest, LINE_MAX, fmt, ap);
 
     int i = 0;
+    //Prints out each char from the buffer
     while (dest[i])
         printc(dest[i++]);
 
