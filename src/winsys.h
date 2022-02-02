@@ -28,13 +28,14 @@ public:
     virtual void move(const CPoint &delta);
 };
 
-//CWindow defines some of the
+//CWindow defines some of the virtual functions that cview had
 class CWindow : public CView {
 protected:
-    //the "filling" mostly used by paint
+    //the "filling" used by paint
     char c;
 public:
-    //default constructor
+    //constructor which specifies the geometry and the char of the filling
+    //default value of the char is '*'
     CWindow(CRect r , char _c = '*') : CView(r) , c(_c) {}
     //painting each and every row and column of the window with the c character
     void paint();
@@ -44,6 +45,8 @@ public:
 
 class CFramedWindow : public CWindow {
 public:
+    //constructor which specifies the geometry of the window and the char of the filling
+    //default value of the char is '\'
     CFramedWindow(CRect r , char _c = '\'') : CWindow(r , _c) {}
 
     void paint();
@@ -52,6 +55,8 @@ public:
 class CInputLine : public CFramedWindow {
     string text;
 public:
+    //constructor which specifies the geometry of the window and the char of the filling
+    //default value of the char is ','
     CInputLine(CRect r , char _c = ',') : CFramedWindow(r , _c) {}
 
     void paint();
@@ -62,6 +67,7 @@ public:
 class CGroup : public CView {
     list<CView *> children;
 public:
+    //constructor which specifies the geometry of the window
     CGroup(CRect g) : CView(g) {}
 
     ~CGroup();

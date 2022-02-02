@@ -8,6 +8,7 @@ class CSnake : public CFramedWindow
 public:
     CSnake(CRect r, char _c = ' ');
 
+
 };
 
 #endif

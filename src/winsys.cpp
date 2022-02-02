@@ -103,7 +103,8 @@ bool CInputLine::handleEvent(int c) {
     return true;
 }
 
-
+//painting out the group space with dots
+//and then calling the paint() function for every part of the list
 void CGroup::paint() {
     for (int y = geom.topleft.y; y < geom.topleft.y + geom.size.y; y++) {
         gotoyx(y, geom.topleft.x);
