@@ -40,7 +40,7 @@ void done_screen() {
 }
 
 void update_screen() {
-    //function used to check whether the window has been resized in any way
+    //function used to check whether the terminal window has been resized in any way
 
     //gets the origin cursor
     getscreenanchor(TopLeft.y, TopLeft.x);
