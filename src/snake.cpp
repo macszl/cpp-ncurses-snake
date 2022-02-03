@@ -21,13 +21,14 @@ CSnake::CSnake(CRect r, char _c /*=' '*/) : CFramedWindow(r, _c)
     respawnFood();
     //snake_body.front() will be our head
 
+
     //reserving space for at least 4 starting elements and then using push_back
     snake_body.reserve(4)
     //the starting 4 points of the snake are predetermined
+    snake_body.push_back(CPoint(2, 8));
+    snake_body.push_back(CPoint(2, 7));
+    snake_body.push_back(CPoint(2, 6));
     snake_body.push_back(CPoint(2, 5));
-    snake_body.push_back(CPoint(2, 4));
-    snake_body.push_back(CPoint(2, 3));
-    snake_body.push_back(CPoint(2, 2));
 
 }
 
@@ -187,12 +188,14 @@ void CSnake::restart()
     respawnFood();
     //snake_body.front() will be our head
 
+
+    snake_body.clear();
     //reserving space for at least 4 starting elements and then using push_back
     snake_body.reserve(4)
     //the starting 4 points of the snake are predetermined
+    snake_body.push_back(CPoint(2, 8));
+    snake_body.push_back(CPoint(2, 7));
+    snake_body.push_back(CPoint(2, 6));
     snake_body.push_back(CPoint(2, 5));
-    snake_body.push_back(CPoint(2, 4));
-    snake_body.push_back(CPoint(2, 3));
-    snake_body.push_back(CPoint(2, 2));
 
 }
