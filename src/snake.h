@@ -1,8 +1,12 @@
 #ifndef __SNAKE_H__
 #define __SNAKE_H__
 
+#include <iostream>
+#include <vector>
 #include "winsys.h"
-
+#include "screen.h"
+#include "cpoint.h"
+#include <map>
 typedef enum snake_window_status_t {
     PLAY_MODE = 0,
     PAUSED_MODE,
@@ -23,7 +27,7 @@ private:
     snake_window_status_t status;
     snake_direction_t dir;
 
-    point_t food_loc;
+    CPoint food_loc;
 
     std::size_t level;
     std::size_t highscore;
@@ -32,20 +36,28 @@ private:
 public:
     CSnake(CRect r, char _c = ' ');
 
-    bool handleEvent(int key);
+    bool handleEvent(int key) override;
+    void paint() override;
     void moveWindow(int key);
-    void moveSnake(int key);
+    void moveSnake();
+    void updateSnakeBody(const CPoint & new_point, int size);
+    void checkForFoodOrBodyHit(const CPoint & point);
     void respawnFood();
 
-    bool isAllowedTurn(int key);
-    bool isPassingWall();
-    bool isHittingOccupied( const CPoint & point);
-    bool isHittingFood();
+    bool isAllowedTurn(int key) const;
+    bool isHittingWall() const;
+    bool isHittingOccupied( const CPoint & point) const;
+    bool isHittingFood(const CPoint & point) const;
+    bool isSpeedingUp(int key) const;
 
     void drawFood();
     void drawSnake();
+    void drawHelp();
+    void drawPauseInfo();
+    void drawKilledInfo();
 
     void snakeKill();
+    void snakeGrow();
 
     void restart();
 };
