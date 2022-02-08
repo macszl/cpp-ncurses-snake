@@ -60,6 +60,7 @@ public:
     void snakeGrow();
 
     void restart();
+
 };
 
 #endif

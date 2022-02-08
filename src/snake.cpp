@@ -45,9 +45,27 @@ bool CSnake::handleEvent(int key)
                                                        {KEY_UP,    DIR_UP}};
     std::map<int, snake_direction_t>::iterator key_enum_pair_iterator;
 
+
+    if(is_arrow_key(key) && status == PLAY_MODE)
+    {
+        key_enum_pair_iterator = key_enum_pairs.find(key);
+        if(isAllowedTurn(key))
+            dir = key_enum_pair_iterator->second;
+        return true;
+    }
+    else if(is_arrow_key(key) && status != PLAY_MODE)
+    {
+        moveWindow(key);
+        return true;
+    }
     if( key == 'p' && status == PAUSED_MODE)
     {
         status = PLAY_MODE;
+        return true;
+    }
+    if( key == 'p' && status == PLAY_MODE)
+    {
+        status = PAUSED_MODE;
         return true;
     }
     else if( key == 'h' && status == PAUSED_HELP_MODE)
@@ -65,18 +83,8 @@ bool CSnake::handleEvent(int key)
         restart();
         return true;
     }
-    else if(is_arrow_key(key) && status != PLAY_MODE)
-    {
-        moveWindow(key);
-        return true;
-    }
-    else if(is_arrow_key(key) && status == PLAY_MODE)
-    {
-        key_enum_pair_iterator = key_enum_pairs.find(key);
-        if(isAllowedTurn(key))
-            dir = key_enum_pair_iterator->second;
-        return true;
-    }
+
+
     return true;
 
 }
@@ -86,30 +94,36 @@ void CSnake::paint()
     CFramedWindow::paint();
     gotoyx(geom.topleft.y + geom.size.y, geom.topleft.x);
     printl("Total score %d || Current level %d", highscore, level);
-    if(status == PLAY_MODE)
+    level = highscore / 3 + 1;
+    if( level > 10) level = 10;
+
+    switch(status)
     {
-        usleep(200 * 1000);
-        moveSnake();
-        drawSnake();
-        drawFood();
-    }
-    else if(status == PAUSED_HELP_MODE)
-    {
-        drawSnake();
-        drawFood();
-        drawHelp();
-    }
-    else if(status == PAUSED_MODE)
-    {
-        drawSnake();
-        drawFood();
-        drawPauseInfo();
-    }
-    else
-    {
-        drawSnake();
-        drawFood();
-        drawKilledInfo();
+        case PLAY_MODE:{
+            usleep(200 * 1000 - (level * 16 * 1000) );
+            drawSnake();
+            drawFood();
+            moveSnake();
+            return;
+        }
+        case PAUSED_MODE: {
+            drawSnake();
+            drawFood();
+            drawPauseInfo();
+            return;
+        }
+        case PAUSED_HELP_MODE: {
+            drawSnake();
+            drawFood();
+            drawHelp();
+            return;
+        }
+        case DEAD_MODE: {
+            drawSnake();
+            drawFood();
+            drawKilledInfo();
+            return;
+        }
     }
 }
 
@@ -143,9 +157,10 @@ void CSnake::moveSnake()
         case DIR_UP: {
             CPoint new_point;
             if( isHittingWall())
-                 new_point = CPoint(snake_body.front().x, geom.size.y - 1);
+                 new_point = CPoint(snake_body.front().x, (geom.size.y - 1));
             else
-                 new_point = CPoint(snake_body.front().x, snake_body.front().y - 1);
+                 new_point = CPoint(snake_body.front().x, (snake_body.front().y - 1));
+
 
             checkForFoodOrBodyHit(new_point);
             updateSnakeBody(new_point, size_pre_food);
@@ -156,7 +171,7 @@ void CSnake::moveSnake()
             if (isHittingWall())
                 new_point = CPoint(snake_body.front().x, 0);
             else
-                new_point = CPoint(snake_body.front().x, snake_body.front().y + 1);
+                new_point = CPoint(snake_body.front().x, (snake_body.front().y + 1));
 
             checkForFoodOrBodyHit(new_point);
             updateSnakeBody(new_point, size_pre_food);
@@ -167,7 +182,7 @@ void CSnake::moveSnake()
             if (isHittingWall())
                 new_point = CPoint(0 , snake_body.front().y);
             else
-                new_point = CPoint(snake_body.front().x + 1, snake_body.front().y);
+                new_point = CPoint( (snake_body.front().x + 1), snake_body.front().y);
 
             checkForFoodOrBodyHit(new_point);
             updateSnakeBody(new_point, size_pre_food);
@@ -176,9 +191,9 @@ void CSnake::moveSnake()
         case DIR_LEFT: {
             CPoint new_point;
             if (isHittingWall())
-                new_point = CPoint(geom.size.x - 1, snake_body.front().y);
+                new_point = CPoint((geom.size.x - 1), snake_body.front().y);
             else
-                new_point = CPoint(snake_body.front().x - 1, snake_body.front().y);
+                new_point = CPoint((snake_body.front().x - 1), snake_body.front().y);
 
             checkForFoodOrBodyHit(new_point);
             updateSnakeBody(new_point, size_pre_food);
@@ -191,11 +206,12 @@ void CSnake::moveSnake()
 }
 void CSnake::updateSnakeBody(const CPoint & new_point, int size)
 {
-    for(int i = 0; i < size - 1; i++)
+    for(int i = size - 1; i > 0; i--)
     {
-        std::swap( snake_body[i + 1], snake_body[i]);
+        std::swap( snake_body[i], snake_body[i - 1]);
     }
     snake_body.front() = new_point;
+
 }
 void CSnake::respawnFood()
 {
@@ -284,6 +300,7 @@ void CSnake::checkForFoodOrBodyHit(const CPoint & point)
 
     if(isHittingFood(point))
     {
+        highscore++;
         respawnFood();
         snakeGrow();
         return;
@@ -348,7 +365,7 @@ void CSnake::restart()
     dir = DIR_RIGHT;
     respawnFood();
     //snake_body.front() will be our head
-
+    status = PLAY_MODE;
 
     snake_body.clear();
     //reserving space for at least 4 starting elements and then using push_back
@@ -360,4 +377,3 @@ void CSnake::restart()
     snake_body.emplace_back(2, 5);
 
 }
-
