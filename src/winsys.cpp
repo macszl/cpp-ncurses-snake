@@ -190,6 +190,7 @@ void CDesktop::run() {
     while (1) {
         //the function gets a keystroke from the player, if the player doesnt press anything it returns -1
         int c = getEvent();
+        flushinp();
         //user has quit the program
         if(c == 'q' || c == 'Q')
             break;
@@ -203,3 +204,4 @@ void CDesktop::run() {
         }
     }
 }
+
