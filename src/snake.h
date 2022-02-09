@@ -33,6 +33,7 @@ private:
     std::size_t highscore;
 
     std::vector<CPoint> snake_body;
+    size_t tick;
 public:
     CSnake(CRect r, char _c = ' ');
 

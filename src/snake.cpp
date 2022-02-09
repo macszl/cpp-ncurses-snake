@@ -45,12 +45,16 @@ bool CSnake::handleEvent(int key)
                                                        {KEY_UP,    DIR_UP}};
     std::map<int, snake_direction_t>::iterator key_enum_pair_iterator;
 
-
+    if(status == PLAY_MODE) {
+        tick += 20;
+    }
     if(is_arrow_key(key) && status == PLAY_MODE)
     {
         key_enum_pair_iterator = key_enum_pairs.find(key);
         if(isAllowedTurn(key))
             dir = key_enum_pair_iterator->second;
+        moveSnake();
+        tick = 0;
         return true;
     }
     else if(is_arrow_key(key) && status != PLAY_MODE)
@@ -100,10 +104,12 @@ void CSnake::paint()
     switch(status)
     {
         case PLAY_MODE:{
-            usleep(200 * 1000 - (level * 16 * 1000) );
             drawSnake();
             drawFood();
-            moveSnake();
+            if(tick >= (200 - (level * 16)) ) {
+                moveSnake();
+                tick = 0;
+            }
             return;
         }
         case PAUSED_MODE: {
