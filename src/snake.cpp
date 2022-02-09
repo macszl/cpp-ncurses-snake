@@ -163,9 +163,9 @@ void CSnake::moveSnake()
         case DIR_UP: {
             CPoint new_point;
             if( isHittingWall())
-                 new_point = CPoint(snake_body.front().x, (geom.size.y - 1));
+                new_point = CPoint(snake_body.front().x, (geom.size.y - 2));
             else
-                 new_point = CPoint(snake_body.front().x, (snake_body.front().y - 1));
+                new_point = CPoint(snake_body.front().x, (snake_body.front().y - 1));
 
 
             checkForFoodOrBodyHit(new_point);
@@ -175,7 +175,7 @@ void CSnake::moveSnake()
         case DIR_DOWN: {
             CPoint new_point;
             if (isHittingWall())
-                new_point = CPoint(snake_body.front().x, 0);
+                new_point = CPoint(snake_body.front().x, 1);
             else
                 new_point = CPoint(snake_body.front().x, (snake_body.front().y + 1));
 
@@ -186,7 +186,7 @@ void CSnake::moveSnake()
         case DIR_RIGHT: {
             CPoint new_point;
             if (isHittingWall())
-                new_point = CPoint(0 , snake_body.front().y);
+                new_point = CPoint(1 , snake_body.front().y);
             else
                 new_point = CPoint( (snake_body.front().x + 1), snake_body.front().y);
 
@@ -197,7 +197,7 @@ void CSnake::moveSnake()
         case DIR_LEFT: {
             CPoint new_point;
             if (isHittingWall())
-                new_point = CPoint((geom.size.x - 1), snake_body.front().y);
+                new_point = CPoint((geom.size.x - 2), snake_body.front().y);
             else
                 new_point = CPoint((snake_body.front().x - 1), snake_body.front().y);
 
@@ -233,9 +233,9 @@ void CSnake::respawnFood()
 bool CSnake::isAllowedTurn(int key) const
 {
     if((dir == DIR_RIGHT && key == KEY_LEFT)
-    || ( dir == DIR_UP   && key == KEY_DOWN)
-    || ( dir == DIR_LEFT && key == KEY_RIGHT)
-    || ( dir == DIR_DOWN && key == KEY_UP))
+       || ( dir == DIR_UP   && key == KEY_DOWN)
+       || ( dir == DIR_LEFT && key == KEY_RIGHT)
+       || ( dir == DIR_DOWN && key == KEY_UP))
     {
         return false;
     }
@@ -246,10 +246,10 @@ bool CSnake::isAllowedTurn(int key) const
 }
 bool CSnake::isHittingWall() const
 {
-    if((dir == DIR_UP    && snake_body.front().y == 0 )
-    || (dir == DIR_DOWN  && snake_body.front().y == geom.size.y - 1)
-    || (dir == DIR_LEFT  && snake_body.front().x == 0 )
-    || (dir == DIR_RIGHT && snake_body.front().x == geom.size.x - 1) )
+    if((dir == DIR_UP    && snake_body.front().y == 1 )
+       || (dir == DIR_DOWN  && snake_body.front().y == geom.size.y - 2)
+       || (dir == DIR_LEFT  && snake_body.front().x == 1 )
+       || (dir == DIR_RIGHT && snake_body.front().x == geom.size.x - 2) )
     {
         return true;
     }
@@ -284,9 +284,9 @@ bool CSnake::isHittingFood( const CPoint & point) const
 bool CSnake::isSpeedingUp(int key) const
 {
     if( (key == KEY_RIGHT && dir == DIR_RIGHT)
-    ||  (key == KEY_LEFT  && dir == DIR_LEFT)
-    ||  (key == KEY_UP    && dir == DIR_UP)
-    ||  (key == KEY_DOWN  && dir == DIR_DOWN))
+        ||  (key == KEY_LEFT  && dir == DIR_LEFT)
+        ||  (key == KEY_UP    && dir == DIR_UP)
+        ||  (key == KEY_DOWN  && dir == DIR_DOWN))
     {
         return true;
     }
