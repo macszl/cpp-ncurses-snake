@@ -49,7 +49,6 @@ public:
     bool isHittingWall() const;
     bool isHittingOccupied( const CPoint & point) const;
     bool isHittingFood(const CPoint & point) const;
-    bool isSpeedingUp(int key) const;
 
     void drawFood();
     void drawSnake();

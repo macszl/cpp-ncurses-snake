@@ -1,7 +1,5 @@
-#include <unistd.h>
 #include <utility>
 #include <algorithm>
-#include <string_view>
 #include "snake.h"
 
 bool is_arrow_key(int c)
@@ -24,6 +22,7 @@ CSnake::CSnake(CRect r, char _c /*=' '*/) : CFramedWindow(r, _c)
     dir = DIR_RIGHT;
     status = PAUSED_HELP_MODE;
     respawnFood();
+    tick = 0;
     //snake_body.front() will be our head
 
 
@@ -153,7 +152,7 @@ void CSnake::moveWindow(int key)
 }
 void CSnake::moveSnake()
 {
-    int size_pre_food = snake_body.size();
+    int size_pre_food = (int) snake_body.size();
     switch (dir) {
         case DIR_UP: {
             CPoint new_point;
@@ -276,21 +275,6 @@ bool CSnake::isHittingFood( const CPoint & point) const
     }
 }
 
-bool CSnake::isSpeedingUp(int key) const
-{
-    if( (key == KEY_RIGHT && dir == DIR_RIGHT)
-        ||  (key == KEY_LEFT  && dir == DIR_LEFT)
-        ||  (key == KEY_UP    && dir == DIR_UP)
-        ||  (key == KEY_DOWN  && dir == DIR_DOWN))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
 void CSnake::checkForFoodOrBodyHit(const CPoint & point)
 {
     if(isHittingOccupied(point))
@@ -355,7 +339,7 @@ void CSnake::snakeKill()
 
 void CSnake::snakeGrow()
 {
-    int last_index = snake_body.size() - 1;
+    int last_index = (int) snake_body.size() - 1;
     snake_body.push_back( snake_body[last_index]);
 }
 
