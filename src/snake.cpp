@@ -81,9 +81,13 @@ bool CSnake::handleEvent(int key)
         restart();
         return true;
     }
+    else if( key == -1)
+    {
+        return true;
+    }
 
 
-    return true;
+    return false;
 
 }
 
