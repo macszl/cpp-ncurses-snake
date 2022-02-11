@@ -62,17 +62,12 @@ bool CSnake::handleEvent(int key)
         moveWindow(key);
         return true;
     }
-    if( key == 'p' && status == PAUSED_MODE)
+    else if( key == 'p' && status == PAUSED_MODE)
     {
         status = PLAY_MODE;
         return true;
     }
-    if( key == 'p' && status == PLAY_MODE)
-    {
-        status = PAUSED_MODE;
-        return true;
-    }
-    else if( key == 'h' && status == PAUSED_HELP_MODE)
+    else if( ( key == 'p' && status == PLAY_MODE )|| (key == 'h' && status == PAUSED_HELP_MODE))
     {
         status = PAUSED_MODE;
         return true;
